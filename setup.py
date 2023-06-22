@@ -17,7 +17,7 @@ logo = r"""
 if __name__ == "__main__":
     print(logo)
     setup(
-        use_scm_version=True
+        use_scm_version=True,
         version=versioneer.get_version(),
         cmdclass=versioneer.get_cmdclass()    
     )
