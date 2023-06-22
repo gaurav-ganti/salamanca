@@ -73,9 +73,10 @@ docs: $(VENV_DIR)  ## make the docs
 	cd doc; make html
 
 .PHONY: virtual-environment
-virtual-environment: $(VENV_DIR)  ## make virtual environment for development
+virtual-environment: 
+	make $(VENV_DIR)  ## make virtual environment for development
 
-$(VENV_DIR):
+$(VENV_DIR): setup.py
 	$(VENV_DIR)/bin/pip install --upgrade pip
 	$(VENV_DIR)/bin/pip install -e .[test,doc]
 	$(CONDA_EXE) env update --name $(CONDA_DEFAULT_ENV) --file $(DOC_ENVIRONMENT_CONDA_FILE)
