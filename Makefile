@@ -2,16 +2,16 @@
 
 DOC_DIR=./doc
 DOC_ENVIRONMENT_CONDA_FILE=$(DOC_DIR)/environment.yml
+VENV_DIR=./venv
 
-
-ifndef CONDA_PREFIX
-$(error Conda not active, please install conda and then activate it using \`conda activate\`))
-else
-ifeq ($(CONDA_DEFAULT_ENV),base)
-$(error Do not install to conda base environment. Source a different conda environment e.g. \`conda activate pyam\` or \`conda create --name pyam python=3.7\` and rerun make))
-endif
-VENV_DIR=$(CONDA_PREFIX)
-endif
+##ifndef CONDA_PREFIX
+##$(error Conda not active, please install conda and then activate it using \`conda activate\`))
+##else
+##ifeq ($(CONDA_DEFAULT_ENV),base)
+##$(error Do not install to conda base environment. Source a different conda environment e.g. \`conda activate pyam\` or \`conda create --name pyam python=3.7\` and rerun make))
+##endif
+##VENV_DIR=$(CONDA_PREFIX)
+##endif
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -73,11 +73,13 @@ docs: $(VENV_DIR)  ## make the docs
 	cd doc; make html
 
 .PHONY: virtual-environment
-virtual-environment: $(VENV_DIR)  ## make virtual environment for development
+virtual-environment: 
+	make $(VENV_DIR)  ## make virtual environment for development
 
-$(VENV_DIR):
+$(VENV_DIR): setup.py
+	[ -d $(VENV_DIR) ] || python3 -m venv $(VENV_DIR)
 	$(VENV_DIR)/bin/pip install --upgrade pip
 	$(VENV_DIR)/bin/pip install -e .[test,doc]
-	$(CONDA_EXE) env update --name $(CONDA_DEFAULT_ENV) --file $(DOC_ENVIRONMENT_CONDA_FILE)
+	## $(CONDA_EXE) env update --name $(CONDA_DEFAULT_ENV) --file $(DOC_ENVIRONMENT_CONDA_FILE)
 
 	touch $(VENV_DIR)

@@ -8,3 +8,4 @@ dist
 .cache
 .*
 tmp
+venv/
